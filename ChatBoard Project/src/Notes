@@ -1,0 +1,58 @@
+Create chat room and username and pass as global variables
+
+
+1. better to create one class with all methods? either
+
+2. how to use command line? built-in terminal works
+
+3. how to connect database to Java? in class
+
+
+create database for user/pass
+
+create database for user/chat
+
+*append string to array then add array to database
+
+*if two people, identify with 0 or 1
+
+
+
+
+        Connection c = null;
+        Statement stmt = null;
+
+        try{
+            Class.forName("org.postgresql.Driver");
+            c = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/usersdb","postgres",
+                    "aple26"
+            ); // movies is database name and last parameter is password to database
+            System.out.println("Connected to the DB");
+
+        } catch (Exception e){
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        try {
+            stmt = c.createStatement();
+            String sql = "CREATE TABLE COMPANY " +
+                    "(ID INT PRIMARY KEY NOT NULL," +
+                    " PASSWORD TEXT NOT NULL," +
+                    " NAME TEXT NOT NULL," +
+                    " CHATBOARD TEXT NOT NULL," +
+                    " HISTORY TEXT NOT NULL)";
+            stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+
+            System.out.println("Table was created");
+
+        } catch (Exception e ){
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }

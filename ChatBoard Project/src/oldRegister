@@ -1,0 +1,63 @@
+[PASSES]
+
+        Scanner consoleRegister = new Scanner(System.in);
+
+        String user = "";
+        String pass = "";
+
+        String query = "INSERT INTO upass(username, password) VALUES(?, ?)";
+
+        boolean redoUser = true;
+        while (redoUser){
+            System.out.print("Username: ");
+            user = consoleRegister.next();
+            System.out.print("Password: ");
+            pass = consoleRegister.next();
+
+            try (Connection con = DriverManager.getConnection(url, getUser, getPass);
+                 PreparedStatement pst = con.prepareStatement(query)){
+
+                pst.setString(1,user);
+                pst.setString(2,pass);
+                pst.executeUpdate();
+
+                redoUser = false;
+            } catch (Exception e){
+                e.printStackTrace();
+                System.out.println("This username " + user + " already exists");
+            }
+        }
+        // add try catch, connect to database
+
+
+--------------------------------------------------------------------------------------
+[FAILS]
+
+Class.forName("org.postgresql.Driver");
+        Connection c =  DriverManager.getConnection(url,getUser, getPass);
+        Statement stmt = null;
+
+        boolean redoUser = true;
+        while (redoUser){
+            System.out.print("Username: ");
+            user = consoleRegister.next();
+            System.out.print("Password: ");
+            pass = consoleRegister.next();
+
+            try {
+                c.setAutoCommit(false);
+                 stmt = c.createStatement();
+                 String sql = "INSERT INTO UPASS("
+                         + "USERNAME,PASSWORD) "
+                         + "VALUES(\'" + user + "\', " + "\'" + pass + "\');";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                c.commit();
+                c.close();
+
+                redoUser = false;
+            } catch (Exception e){
+                e.printStackTrace();
+                System.out.println("This username " + user + " already exists");
+            }
+        }
